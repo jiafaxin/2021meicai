@@ -8,15 +8,9 @@ import java.util.*;
 public class ArrayTest {
 
     public static void main(String[] string) throws Exception{
-//        char[][] array = {{'A','B','C','E'}, {'S','F','C','S'}, {'A','D','E','E'}};
-//        String word = "ABCCED";
-//        boolean exist = exist(array, word);
-//        System.out.println(exist);
-//        char[][] array = {{'1','0','1','0','0'}, {'1','0','1','1','1'}, {'1','1','1','1','1'},{'1','0','0','1','0'}};
-//        int maximalRectangle = maximalRectangle(array);
-        //System.out.println(maximalRectangle);
-        String[] permutation = permutation("abc");
-        System.out.println(permutation);
+        int[] array = {1,3,4,1,8,2,4,8};
+        int[] singleNumbers = singleNumbers(array);
+        System.out.println(singleNumbers);
 
     }
 
@@ -952,6 +946,37 @@ public class ArrayTest {
         c[i] = c[x];
         c[x] = temp;
     }
+
+    public static int[] singleNumbers(int[] nums) {
+        //用于将所有的数异或起来
+        int k = 0;
+
+        for(int num: nums) {
+            k ^= num;
+        }
+
+        //获得k中最低位的1
+        int mask = 1;
+
+        //mask = k & (-k) 这种方法也可以得到mask，具体原因百度 哈哈哈哈哈
+        while((k & mask) == 0) {
+            mask <<= 1;
+        }
+
+        int a = 0;
+        int b = 0;
+
+        for(int num: nums) {
+            if((num & mask) == 0) {
+                a ^= num;
+            } else {
+                b ^= num;
+            }
+        }
+
+        return new int[]{a, b};
+    }
+
 
 
 }
