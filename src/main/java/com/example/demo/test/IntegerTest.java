@@ -6,6 +6,7 @@ import java.util.List;
 public class IntegerTest {
 
     public static void main(String[] args) {
+
         //System.out.println(reverse(-130));
         int[] num = {2,16,3,5,13,1,16,1,12,18,11,8,11,11,5,1};
         int target = 9;

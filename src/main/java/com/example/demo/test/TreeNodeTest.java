@@ -1,7 +1,6 @@
 package com.example.demo.test;
 
 import lombok.Data;
-
 import java.util.*;
 
 @Data
@@ -27,18 +26,17 @@ public class TreeNodeTest {
     }
 
     public static void main(String[] args) {
+//        TreeNodeTest root1 = new TreeNodeTest(1);
+//        TreeNodeTest root2 = new TreeNodeTest(2);
 //        TreeNodeTest root3 = new TreeNodeTest(3);
-//        TreeNodeTest root9 = new TreeNodeTest(9);
-//        TreeNodeTest root20 = new TreeNodeTest(20);
-//        TreeNodeTest root15 = new TreeNodeTest(15);
-//        TreeNodeTest root7 = new TreeNodeTest(7);
-//        root3.left = root9;
-//        root3.right = root20;
-//        root20.left = root15;
-//        root20.right = root7;
-//        levelOrder(root3);
-        int[] array = {1,3,2,6,5};
-
+//        TreeNodeTest root4 = new TreeNodeTest(4);
+//        TreeNodeTest root5 = new TreeNodeTest(5);
+//        //root1.left = root2;
+//        root1.right = root3;
+//        root3.right = root4;
+//        root4.right = root5;
+//        int minDepth = minDepth(root1);
+//        System.out.println(minDepth);
 
     }
 
@@ -109,28 +107,63 @@ public class TreeNodeTest {
      * @return
      */
     public static int maxDepth(TreeNodeTest root){
-        if(root == null){
+        if (root == null) {
             return 0;
         }
-        int left = maxDepth(root.left);
-        System.out.println("left:"+left);
-        int right = maxDepth(root.right);
-        System.out.println("right:"+right);
-        return Math.max(left,right)+1;
+        Queue<TreeNodeTest> queue = new LinkedList<TreeNodeTest>();
+        queue.offer(root);
+        int ans = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size > 0) {
+                TreeNodeTest node = queue.poll();
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+                if (node.right != null) {
+                    queue.offer(node.right);
+                }
+                size--;
+            }
+            ans++;
+        }
+        return ans;
     }
 
     /**
-     * 二叉树的最小深度
+     * 二叉树的最小深度--快手商业化
      * @param root
      * @return
      */
     public static int minDepth(TreeNodeTest root){
-        if(root == null){
+        Queue<TreeNodeTest> queue = new LinkedList<TreeNodeTest>();
+        if (root == null)
             return 0;
+        queue.offer(root);
+        /**********修改的地方*****************/
+        int level = 1;
+        /***********************************/
+        while (!queue.isEmpty()) {
+            int levelNum = queue.size(); // 当前层元素的个数
+            for (int i = 0; i < levelNum; i++) {
+                TreeNodeTest curNode = queue.poll();
+                if (curNode != null) {
+                    /**********修改的地方*****************/
+                    if (curNode.left == null && curNode.right == null) {
+                        return level;
+                    }
+                    /***********************************/
+                    if (curNode.left != null) {
+                        queue.offer(curNode.left);
+                    }
+                    if (curNode.right != null) {
+                        queue.offer(curNode.right);
+                    }
+                }
+            }
+            level++;
         }
-        int left = minDepth(root.left);
-        int right = minDepth(root.right);
-        return null == root.left || null == root.right ? left+right+1:Math.min(left,right)+1;
+        return level;
     }
 
     /**

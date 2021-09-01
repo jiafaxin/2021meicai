@@ -13,6 +13,7 @@ public class threadTest {
         printAB();
     }
 
+
     private static void printAB(){
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(()->{

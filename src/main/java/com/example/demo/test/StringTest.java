@@ -2,12 +2,14 @@ package com.example.demo.test;
 
 import java.util.*;
 
+
 public class StringTest {
 
 
     public static void main(String[] args) {
-        List<Integer> anagrams = findAnagrams("cbaebabacd", "abc");
-        System.out.println(anagrams);
+       String a = "abbcd";
+       String b = "agbce";
+        int longestCommonSubsequence = longestCommonSubsequence(a, b);
     }
 
 
@@ -32,43 +34,43 @@ public class StringTest {
      * @param text2
      * @return
      */
-//    public static int longestCommonSubsequence(String text1, String text2) {
-//        if (text1.length()==0||text2.length()==0) return 0;
-//        int m = text1.length();
-//        int n = text2.length();
-//        int[][] dp = new int[m+1][n+1];
-//        for (int i = 1; i < m+1; i++) {
-//            for (int j = 1; j < n+1; j++) {
-//                if (text1.charAt(i-1)==text2.charAt(j-1)){
-//                    dp[i][j] = dp[i-1][j-1]+1;
-//                }else {
-//                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
-//                }
-//            }
-//        }
-//        return dp[m][n];
-//    }
-
     public static int longestCommonSubsequence(String text1, String text2) {
-        //临界条件判断
-        if(text1.length()==0||text2.length()==0) return 0;
+        if (text1.length()==0||text2.length()==0) return 0;
         int m = text1.length();
         int n = text2.length();
         int[][] dp = new int[m+1][n+1];
-        int result = 0;
-        //从1开始，所以dp数组长度加一
-        for(int i=1;i<m+1;i++){
-            for(int j=1;j<n+1;j++){
-                if(text1.charAt(i-1)==text2.charAt(j-1)){
+        for (int i = 1; i < m+1; i++) {
+            for (int j = 1; j < n+1; j++) {
+                if (text1.charAt(i-1)==text2.charAt(j-1)){
                     dp[i][j] = dp[i-1][j-1]+1;
-                    result = Math.max(result,dp[i][j]);
-                }else{
-                    dp[i][j] = 0;
+                }else {
+                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
                 }
             }
         }
-        return result;
+        return dp[m][n];
     }
+
+//    public static int longestCommonSubsequence(String text1, String text2) {
+//        //临界条件判断
+//        if(text1.length()==0||text2.length()==0) return 0;
+//        int m = text1.length();
+//        int n = text2.length();
+//        int[][] dp = new int[m+1][n+1];
+//        int result = 0;
+//        //从1开始，所以dp数组长度加一
+//        for(int i=1;i<m+1;i++){
+//            for(int j=1;j<n+1;j++){
+//                if(text1.charAt(i-1)==text2.charAt(j-1)){
+//                    dp[i][j] = dp[i-1][j-1]+1;
+//                    result = Math.max(result,dp[i][j]);
+//                }else{
+//                    dp[i][j] = 0;
+//                }
+//            }
+//        }
+//        return result;
+//    }
 
     /**
      *36. 是不是验证回文串（正反都是一样的）

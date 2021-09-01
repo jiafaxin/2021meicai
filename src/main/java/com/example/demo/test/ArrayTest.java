@@ -8,50 +8,56 @@ import java.util.*;
 public class ArrayTest {
 
     public static void main(String[] string) throws Exception{
-        int[] array = {1,3,4,1,8,2,4,8};
-        int[] singleNumbers = singleNumbers(array);
-        System.out.println(singleNumbers);
 
     }
 
     /**
-     * 给定一个排序数组，你需要在 原地 删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
-     * @param array
+     * 删除排序数组中的重复项
+     * @param nums
      * @return
      */
-    private static int mergeArray(int[] array){
-        int b = 0;
-        for(int c = 1 ;c<array.length;c++){
-            if(array[b] != array[c]){
-                b++;
-                array[b] = array[c];
-            }
+    public int removeDuplicates(int[] nums) {
+        int n = nums.length;
+        if (n == 0) {
+            return 0;
         }
-        return b+1;
+        int fast = 1, slow = 1;
+        while (fast < n) {
+            if (nums[fast] != nums[fast - 1]) {
+                nums[slow] = nums[fast];
+                ++slow;
+            }
+            ++fast;
+        }
+        return slow;
     }
+
 
     /**
      * 合并两个有序数组
+     * 3 6 8
+     * 4 7
      * @param nums1
      * @param m
      * @param nums2
      * @param n
      */
-    public static void merge(int[] nums1, int m, int[] nums2, int n) {
-        //合并后最后一个数的索引为m+n-1
-        int i = m-1;int j = n-1;int k = m+n-1;
-        while(i >= 0 && j >= 0){
-            //将两个数组中从最后一位开始比较，较大的先插入
-            //当j先等于0时，说明nums2的数字已经全部复制到nums1中，此时合并完成(说明nums1中最小的元素比nums2小)
-            //当i先等于0时，说明nums1中原来的所有数字已经复制完毕，此时进入下面的循环(说明nums1中最小的元素比nums2大)
-            nums1[k] = nums1[i] > nums2[j] ? nums1[i] : nums2[j];
-            i--;j--;k--;
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int p1 = m - 1, p2 = n - 1;
+        int tail = m + n - 1;
+        int cur;
+        while (p1 >= 0 || p2 >= 0) {
+            if (p1 == -1) {
+                cur = nums2[p2--];
+            } else if (p2 == -1) {
+                cur = nums1[p1--];
+            } else if (nums1[p1] > nums2[p2]) {
+                cur = nums1[p1--];
+            } else {
+                cur = nums2[p2--];
+            }
+            nums1[tail--] = cur;
         }
-        while(j >= 0){
-            nums1[k] = nums2[j];
-            j--;k--;
-        }
-        Arrays.sort(nums1);
     }
 
     /**
@@ -453,7 +459,7 @@ public class ArrayTest {
             list.add(str);
             map.put(key, list);
         }
-        return new ArrayList<List<String>>(map.values());
+        return new ArrayList<>(map.values());
     }
 
     /**
@@ -730,13 +736,12 @@ public class ArrayTest {
 
     public static void quickSort(int[] array) {
         int len;
-        if (array == null || (len = array.length) == 0
-                || len == 1) {
+        if (array == null || (len = array.length) == 0 || len == 1) {
             return;
         }
         sort(array, 0, len - 1);
+        System.out.println(array.toString());
     }
-
     /**
      * 快速排序
      * 5,4,3,2,1
@@ -745,35 +750,29 @@ public class ArrayTest {
      * @param right
      */
     public static void sort(int[] array, int left, int right) {
-        if (left > right) {
-            return;
+        if(left<right){
+            int p1 = left;
+            int p2 = right;
+            int base = array[p1];
+            while(p1<p2){
+                if(array[p2]<base){
+                    if(array[p1]>base){
+                        int temp = array[p1];
+                        array[p1] = array[p2];
+                        array[p2]=temp;
+                        p2--;
+                    }else{
+                        p1++;
+                    }
+                }else{
+                    p2--;
+                }
+            }
+            array[left]=array[p1];
+            array[p1] = base;
+            sort(array,left,p1-1);
+            sort(array,p1+1,right);
         }
-        // base中存放基准数
-        int base = array[left];
-        int i = left, j = right;
-        while (i != j) {
-            // 顺序很重要，先从右边开始往左找，直到找到比base值小的数
-            while (array[j] >= base && i < j) {
-                j--;
-            }
-            // 再从左往右边找，直到找到比base值大的数
-            while (array[i] <= base && i < j) {
-                i++;
-            }
-            // 上面的循环结束表示找到了位置或者(i>=j)了，交换两个数在数组中的位置
-            if (i < j) {
-                int tmp = array[i];
-                array[i] = array[j];
-                array[j] = tmp;
-            }
-        }
-        // 将基准数放到中间的位置（基准数归位）
-        array[left] = array[i];
-        array[i] = base;
-        // 递归，继续向基准的左右两边执行和上面同样的操作
-        // i的索引处为上面已确定好的基准值的位置，无需再处理
-        sort(array, left, i - 1);
-        sort(array, i + 1, right);
     }
 
     /**
@@ -976,6 +975,28 @@ public class ArrayTest {
 
         return new int[]{a, b};
     }
+
+    /**
+     * 零钱兑换
+     * @param coins
+     * @param amount
+     * @return
+     */
+    public static int coinChange(int[] coins, int amount) {
+        int max = amount + 1;
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, max);
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            for (int j = 0; j < coins.length; j++) {
+                if (coins[j] <= i) {
+                    dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
 
 
 

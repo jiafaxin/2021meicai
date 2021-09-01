@@ -17,16 +17,16 @@ public class MaxQueue {
     }
 
     public int max_value() {
-        return deque.isEmpty()?-1:deque.peek();
+        return deque.isEmpty()?-1:deque.peekFirst();
 
     }
 
     public void push_back(int value) {
         queue.add(value);
-        while(!deque.isEmpty() && value<deque.peek()){
-            deque.pop();
+        while(!deque.isEmpty() && value>deque.peekLast()){
+            deque.pollLast();
         }
-        deque.push(value);
+        deque.addLast(value);
 
     }
 
@@ -35,8 +35,8 @@ public class MaxQueue {
             return -1;
         }
         int poll = queue.poll();
-        if(poll==deque.peek()){
-            deque.pop();
+        if(poll==deque.peekFirst()){
+            deque.pollFirst();
         }
         return poll;
 
