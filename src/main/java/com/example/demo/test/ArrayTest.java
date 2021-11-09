@@ -13,6 +13,7 @@ public class ArrayTest {
 
     /**
      * 滑动窗口的最大值
+     * 单调栈做法
      * array 数组
      * @param nums
      * @param k
